@@ -1,0 +1,153 @@
+<table multiTemplateDataRows mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)"
+  class="data-table-custom">
+
+  <ng-container [matColumnDef]="col?.key" *ngFor="let col of colDef; let i = index">
+
+
+    <th [ngStyle]="{'width': col?.width ? col.width : 'auto'}" class="fade-in" mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!col?.sortable">{{col?.label}}</th>
+    <td mat-cell *matCellDef="let element" [ngClass]="{'editable-cell': col?.editable}">
+      <div class="edit-icon" *ngIf="element.isEditingCol!==col.key" (click)="clickCol(col,element)"> <i class="material-icons">edit</i> </div>
+
+      <div *ngIf="!col?.template && !col?.defaultTemplate">
+        <span [hidden]="element.isEditingCol==col.key" (click)="clickCol(col,element)">
+          <span *ngIf="col?.type=='date'">{{element[col?.key] | date: col?.formatDate}}</span>
+          <span *ngIf="col?.type=='number'">{{element[col?.key] | number: col?.formatNumber}}</span>
+          <span *ngIf="col?.type!=='date' && col?.type!=='number'">{{element[col?.key]}}</span>
+        </span>
+        <div *ngIf="element.isEditingCol==col.key">
+          <ng-container
+            *ngTemplateOutlet="editingTemplate;context:{$implicit: element, col: col.key, options: col?.optionsSelect}">
+          </ng-container>
+        </div>
+      </div>
+      <!-- Perc Template -->
+      <div *ngIf=" col?.defaultTemplate=='percTemplate'">
+        <ng-container *ngTemplateOutlet=" percTemplate;context:{$implicit: element[col?.key]}">
+        </ng-container>
+      </div>
+      <!-- Currency template -->
+      <div *ngIf="col?.defaultTemplate=='currencyTemplate'">
+        <ng-container
+          *ngTemplateOutlet="currencyTemplate;context:{$implicit: element[col?.key], symbol: col?.currency}">
+        </ng-container>
+      </div>
+      <!-- Expand template -->
+      <div *ngIf="col?.template && col?.template==expandTemplate">
+        <ng-container *ngTemplateOutlet="col?.template;context:{$implicit: element}">
+        </ng-container>
+      </div>
+      <!-- Template custom -->
+      <div *ngIf="col?.template && col?.template!==expandTemplate">
+        <ng-container
+          *ngTemplateOutlet="col?.template;context:{$implicit: element[col?.key], secondVal: element[col?.secondVal], thirdVal: element[col?.thirdVal]}">
+        </ng-container>
+      </div>
+    </td>
+  </ng-container>
+  <!-- Expanded details -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+      <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+        <table mat-table [dataSource]="dataSourceExpanded" class="data-table-custom inner-after-open-table">
+          <ng-container [matColumnDef]="colExpanded?.key"
+            *ngFor="let colExpanded of colDefExpanded; let iExpanded = index">
+            <th mat-header-cell *matHeaderCellDef>
+              {{colExpanded?.label}}</th>
+            <td mat-cell class="cell-expanded" *matCellDef="let element">
+              <div *ngIf="!colExpanded?.template && !colExpanded?.defaultTemplate">
+                <span [hidden]="element.isEditingCol==colExpanded.key" (click)="clickCol(colExpanded,element)">
+                  <span
+                    *ngIf="colExpanded?.type=='date'">{{element[colExpanded?.key] | date: colExpanded?.formatDate}}</span>
+                  <span *ngIf="colExpanded?.type!=='date'">{{element[colExpanded?.key]}}</span>
+                </span>
+                <div *ngIf="element.isEditingCol==colExpanded.key">
+                  <ng-container
+                    *ngTemplateOutlet="editingTemplate;context:{$implicit: element, col: colExpanded.key, options: colExpanded?.optionsSelect}">
+                  </ng-container>
+                </div>
+              </div>
+              <!-- Perc Template -->
+              <div *ngIf=" colExpanded?.defaultTemplate=='percTemplate'">
+                <ng-container *ngTemplateOutlet=" percTemplate;context:{$implicit: element[colExpanded?.key]}">
+                </ng-container>
+              </div>
+              <!-- Currency template -->
+              <div *ngIf="colExpanded?.defaultTemplate=='currencyTemplate'">
+                <ng-container
+                  *ngTemplateOutlet="currencyTemplate;context:{$implicit: element[colExpanded?.key], symbol: colExpanded?.currency}">
+                </ng-container>
+              </div>
+              <!-- Template custom -->
+              <div *ngIf="colExpanded?.template">
+                <ng-container
+                  *ngTemplateOutlet="colExpanded?.template;context:{$implicit: element[colExpanded?.key], secondVal: element[colExpanded?.secondVal], thirdVal: element[colExpanded?.thirdVal]}">
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsExpanded"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsExpanded;"></tr>
+        </table>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+    [ngClass]="{'expandable-row': settings.expandable}" [class.example-expanded-row]="expandedElement === element"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+</table>
+<div [hidden]="!settings.paginable">
+  <mat-paginator (page)="page($event)" [pageSizeOptions]="settings.pageSizeOptions" [pageSize]="settings.pageSize">
+  </mat-paginator>
+</div>
+
+<ng-template #percTemplate let-value>
+  {{value | number}} %
+</ng-template>
+
+<ng-template #numberTemplate let-value>
+  {{value | number}}
+</ng-template>
+
+<ng-template #currencyTemplate let-value let-symbol="symbol">
+  {{value | number}} {{symbol}}
+</ng-template>
+
+<ng-template #expandTemplate let-value>
+  <div class="master-detail-button">
+    <div (click)="expandClick(value)">+</div>
+  </div>
+</ng-template>
+
+<ng-template #inputTextTemplate let-value let-key="col">
+  <div class="wrap-editor fade-in">
+    <div><input class="custom-editing-item" type="text" [(ngModel)]="value.editValue"></div>
+    <div><button class="save-button" mat-button (click)="saveEditing(value,key)">Save</button></div>
+    <div> <button class="save-button" mat-button (click)="removeEditing(value)">Undo</button> </div>
+  </div>
+</ng-template>
+
+<ng-template #selectTemplate let-value let-key="col" let-optionsList="options">
+  <div class="wrap-editor fade-in">
+    <select [(ngModel)]="value.editValue" class="custom-editing-item">
+      <option *ngFor="let opt of optionsList" [value]="opt">{{opt}}</option>
+    </select><br>
+    <button class="save-button" mat-button (click)="saveEditing(value,key)">Save</button>
+    <button class="save-button" mat-button (click)="removeEditing(value)">Undo</button>
+  </div>
+</ng-template>
+
+<ng-template #datePickerTemplate let-value let-key="col">
+  <div class="wrap-editor fade-in">
+
+    <input class="custom-editing-item" matInput [matDatepicker]="picker" placeholder="Date"
+      (dateChange)="setDate(value, $event)">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <br>
+    <button class="save-button" mat-button (click)="saveEditing(value,key)">Save</button>
+    <button class="save-button" mat-button (click)="removeEditing(value)">Undo</button>
+  </div>
+</ng-template>

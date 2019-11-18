@@ -1,0 +1,319 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700);
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+
+@import 'variables';
+
+$font-family: 'Source Sans Pro',
+sans-serif;
+$items-border-radius:40px;
+
+// FADE IN EFFECT
+.fade-in {
+  animation: fadein 1s;
+  -moz-animation: fadein 1s;
+  /* Firefox */
+  -webkit-animation: fadein 1s;
+  /* Safari and Chrome */
+  -o-animation: fadein 1s;
+  /* Opera */
+}
+
+
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+
+td,
+tr,
+input,
+select {
+  transition: all ease 300ms;
+}
+
+
+.data-table-custom {
+  width: 100%;
+  font-family: $font-family;
+
+  tr.mat-row,
+  tr.mat-header-row {
+    padding: 0;
+  }
+}
+
+.wrap-editor {
+
+  input,
+  select {
+    font-family: $font-family;
+    margin-right: 10px;
+    outline: none !important;
+    margin-top: 0 !important;
+    border: 0;
+    line-height: 25px;
+    background: rgba(0, 0, 0, .1);
+    padding: 0 10px;
+    border-radius: $items-border-radius;
+
+    &:focus {
+      outline: 0;
+      background: rgba(0, 0, 0, .2);
+    }
+  }
+}
+
+
+
+
+tr.example-detail-row {
+  height: 0;
+}
+
+
+
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+
+  .mat-tab-group {
+    width: 100%;
+  }
+
+  ::ng-deep {
+    .mat-tab-body-content {
+      height: auto;
+    }
+  }
+
+}
+
+.example-element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}
+
+.ng-trigger {
+  margin-top: 0 !important;
+}
+
+.mat-column-expandedDetail {
+  padding: 0px !important;
+}
+
+.expandable-row {
+  cursor: pointer;
+}
+
+
+.example-expanded-row {
+
+  background-color: $accent-color;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, .3);
+  mix-blend-mode: multiply;
+
+  .mat-cell {
+    color: white;
+    border-left: none;
+    border-bottom: 0 !important;
+    cursor: default;
+  }
+
+}
+
+.example-detail-row {
+  .mat-cell {
+    border-bottom: 0;
+  }
+
+  .cell-expanded {
+    border-bottom: 1px solid var(--border-color);
+    ;
+  }
+}
+
+.inner-after-open-table {
+
+  td:last-child {
+    border-right: 1px solid rgba(0, 0, 0, 0.12) !important;
+    border-bottom: 1px solid $border-color;
+  }
+
+  padding: 12px;
+  background: $light-background;
+  box-shadow:none !important;
+
+
+  .table-title {
+    padding: 0;
+    text-align: center;
+  }
+
+  tr {
+    background: white;
+  }
+
+  // tr:nth-child(even) {
+  //   background: rgba(0, 0, 0, .03);
+  // }
+
+  // tr:nth-child(odd) {
+  //   background: #FFF;
+  // }
+
+  tr:hover {
+    background: $hover-color;
+  }
+}
+
+
+
+
+.first-layer-row {
+  box-shadow: 2px 2px 2px black;
+}
+
+
+.mat-column-arrow {
+  padding: 10px 16px !important;
+  text-align: center;
+
+  &::after {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f054";
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+
+  }
+}
+
+
+th.mat-column-arrow {
+  &::after {
+    display: none;
+  }
+}
+
+
+.example-expanded-row {
+  .mat-column-arrow {
+    &::after {
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      content: "\f078";
+      font-style: normal;
+      font-variant: normal;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+
+    }
+  }
+}
+
+
+
+// BORDER-BOTTOM-STYLE
+// td.mat-cell:last-of-type {
+//   border-bottom-width: 0;
+// }
+
+td.mat-cell {
+  border-bottom: 0.5px solid $border-color;
+  border-bottom-width: .5px;
+}
+
+td.mat-cell:last-of-type.mat-column-expand {
+  border-bottom: 1px solid $border-color;
+}
+
+th.mat-header-cell {
+  border-bottom-color: $border-color;
+  background-color: $title-background;
+  text-transform: uppercase;
+  color: $title-color;
+  letter-spacing: 1px;
+
+}
+
+::ng-deep {
+  button.mat-sort-header-button {
+    color: $title-color;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+
+}
+
+.custom-editing-item {
+  float: left;
+}
+
+.save-button {
+  background-color: $title-background;
+  line-height: 25px;
+  border-radius: $items-border-radius;
+  margin-right: 5px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  float: left;
+  color: $title-color;
+}
+
+.wrap-editor {
+  display: flex;
+  align-items: center;
+}
+
+.edit-icon {
+  display: none;
+  float: left;
+  padding: 2px;
+
+  i {
+   font-size: 14px;
+   line-height: 1;
+   color:$title-background;
+  }
+}
+
+.editable-cell {
+  cursor: pointer;
+
+  .edit-icon {
+    display: flex !important;
+
+  }
+}

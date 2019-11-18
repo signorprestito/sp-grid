@@ -1,0 +1,19 @@
+<!-- <app-sp-grid
+[settings]="settings"
+[data]="data" [colDef]="colDef"
+[dataExpanded]="dataExpanded" [colDefExpanded]="colDefExpanded"
+(rowClickEmit)="rowClick($event)" (getDetails)="rowClickDetails($event)"
+(updatedRow)="updatedRow($event)" (sortEvent)="sort($event)" (pageEvent)="page($event)">
+  <ng-template #plusMinusTemplate let-value let-second="secondVal">
+    <span *ngIf="value>0" class="plus-grid">+ </span>
+    <span *ngIf="value<0" class="minus-grid">- </span>
+    <span [innerText]="value"></span>
+  </ng-template>
+</app-sp-grid> -->
+
+<app-sp-grid [settings]="settings" [data]="data" [colDef]="colDef"></app-sp-grid>
+<ng-template #plusMinusTemplate let-value let-second="secondVal">
+  <span *ngIf="value>0" class="plus-grid">+ </span>
+  <span *ngIf="value<0" class="minus-grid">- </span>
+  <span [innerText]="value"></span>
+</ng-template>
