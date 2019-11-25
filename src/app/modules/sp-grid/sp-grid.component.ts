@@ -20,13 +20,13 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class SpGridComponent {
   //template view
-  @ViewChild('percTemplate', { static: true }) percTemplate;
-  @ViewChild('currencyTemplate', { static: true }) currencyTemplate;
-  @ViewChild('expandTemplate', { static: true }) expandTemplate;
+  @ViewChild('percTemplate', { static: true }) percTemplate: any;
+  @ViewChild('currencyTemplate', { static: true }) currencyTemplate: any;
+  @ViewChild('expandTemplate', { static: true }) expandTemplate: any;
   //template input
-  @ViewChild('inputTextTemplate', { static: true }) inputTextTemplate;
-  @ViewChild('selectTemplate', { static: true }) selectTemplate;
-  @ViewChild('datePickerTemplate', { static: true }) datePickerTemplate;
+  @ViewChild('inputTextTemplate', { static: true }) inputTextTemplate: any;
+  @ViewChild('selectTemplate', { static: true }) selectTemplate: any;
+  @ViewChild('datePickerTemplate', { static: true }) datePickerTemplate: any;
   //Sort & paginator
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -45,10 +45,10 @@ export class SpGridComponent {
 
   //master
   displayedColumns: Array<string>;
-  dataSource;
+  dataSource: any;
   //details
   displayedColumnsExpanded: Array<string>;
-  dataSourceExpanded;
+  dataSourceExpanded: any;
   expandedElement: any;
   clickedElement: any;
 
@@ -93,6 +93,7 @@ export class SpGridComponent {
         //set colums to display
         this.displayedColumnsExpanded = this.colDefExpanded.map((col) => {
           return col['key'];
+
         });
       };
       this.dataSourceExpanded = this.dataExpanded;
@@ -108,7 +109,7 @@ export class SpGridComponent {
     this.sortEvent.emit(sort);
   }
 
-  expandClick(element) {
+  expandClick(element:any) {
     this.dataSourceExpanded = [];
     if (this.expandedElement == element) {
       this.expandedElement = "";
@@ -123,7 +124,7 @@ export class SpGridComponent {
     //set clicked col
     this.clickedCol = true;
     //reset all editing
-    this.dataSource.data.forEach(cc => {
+    this.dataSource.data.forEach((cc: any) => {
       cc.isEditingCol = "";
     });
     //set specific editing field
@@ -148,21 +149,21 @@ export class SpGridComponent {
     }
   }
 
-  setDate(element, evt) {
+  setDate(element: any, evt: any) {
     element.editValue = evt.value;
   }
 
-  removeEditing(element) {
+  removeEditing(element: any) {
     element.isEditingCol = "";
   }
 
-  saveEditing(element, key) {
+  saveEditing(element: any, key: string) {
     element[key] = element.editValue;
     this.updatedRow.emit(element);
     element.isEditingCol = "";
   }
 
-  page(evt) {
+  page(evt:any) {
     this.pageEvent.emit(evt);
   }
 
